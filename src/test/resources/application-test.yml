@@ -1,0 +1,21 @@
+# Test Configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  
+  h2:
+    console:
+      enabled: false
+
+logging:
+  level:
+    com.acme: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: INFO
