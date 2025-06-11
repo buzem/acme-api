@@ -50,11 +50,14 @@ public class Lecturer {
     @Column(name = "lecturer_id", nullable = false, unique = true)
     private String lecturerId;
 
+    /**
+     * Column names are explicit about referencing database IDs.
+     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "lecturer_student",
-        joinColumns = @JoinColumn(name = "lecturer_id"),
-        inverseJoinColumns = @JoinColumn(name = "student_id")
+        joinColumns = @JoinColumn(name = "lecturer_db_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "student_db_id", referencedColumnName = "id")
     )
     private Set<Student> students = new HashSet<>();
 
