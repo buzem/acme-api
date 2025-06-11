@@ -62,10 +62,12 @@ public class UniversityService {
 
     @Transactional
     public StudentResponse addStudentToLecturer(String lecturerId, CreateStudentRequest request) {
-        Lecturer lecturer = lecturerRepository.findByLecturerId(lecturerId)
+        //  Fetch the lecturer and their students in one go.
+        Lecturer lecturer = lecturerRepository.findLecturerWithStudents(lecturerId)
                 .orElseThrow(() -> new LecturerNotFoundException(formatLecturerNotFound(lecturerId)));
 
-        Student existingStudent = studentRepository.findByStudentId(request.studentId())
+        //Avoid lazy loading.
+        Student existingStudent = studentRepository.findStudentWithLecturers(request.studentId())
                 .orElse(null);
 
         if (existingStudent != null) {
@@ -87,6 +89,7 @@ public class UniversityService {
     }
 
     private void checkAssignmentConflict(Student student, Lecturer lecturer, String studentId) {
+        // No extra query needed.
         if (student.getLecturers().contains(lecturer)) {
             throw new StudentAlreadyExistsException(
                     formatStudentAlreadyAssigned(studentId)
